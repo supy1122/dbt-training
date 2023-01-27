@@ -7,10 +7,13 @@ ordersellingprice - ordercostprice as profit
 select o.orderid,o.orderdate,o.shipdate,o.shipmode,
 o.ordersellingprice - o.ordercostprice as orderprofit,
   c.customername,c.segment,c.country,o.customerid cid,c.customerid,
-  p.productid,p.category,p.productname,p.subcategory
+  p.productid,p.category,p.productname,p.subcategory,
+  --{{ markup() }} as markup --- this is to reference macros from markdown.sql
+  {{ markup('ordersellingprice','ordercostprice') }} as markup --- this is to reference macros from markdown.sql
  --raw.globalmart.orders
  from {{ ref('RAW_ORDERS') }} as o
  left join {{ ref('RAW_CUSTOMER') }} as c
  on cid = c.customerid
  left join {{ ref('RAW_PRODUCT') }} as p
  on o.productid = p.productid
+{{limit_data_in_dev('orderdate')}}
